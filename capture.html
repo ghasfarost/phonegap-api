@@ -1,0 +1,93 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<title>Captura</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script type="text/javascript" charset="utf-8">
+
+	    // Called when capture operation is finished
+	    //
+	    function captureSuccess(mediaFiles) {
+	        var i, len;
+	        for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+	            uploadFile(mediaFiles[i]);
+	        }
+	    }
+
+	    // Called if something bad happens.
+	    //
+	    function captureError(error) {
+	        var msg = 'An error occurred during capture: ' + error.code;
+	        navigator.notification.alert(msg, null, 'Uh oh!');
+	    }
+
+	    // A button will call this function
+	    //
+	    function captureVideo() {
+	        // Launch device video recording application,
+	        // allowing user to capture up to 2 video clips
+	        navigator.device.capture.captureVideo(captureSuccess, captureError, {limit: 2});
+	    }
+
+	    // Upload files to server
+	    function uploadFile(mediaFile) {
+	        var ft = new FileTransfer(),
+	            path = mediaFile.fullPath,
+	            name = mediaFile.name;
+
+	        ft.upload(path,
+	            "http://my.domain.com/upload.php",
+	            function(result) {
+	                console.log('Upload success: ' + result.responseCode);
+	                console.log(result.bytesSent + ' bytes sent');
+	            },
+	            function(error) {
+	                console.log('Error uploading file ' + path + ': ' + error.code);
+	            },
+	            { fileName: name });
+	    }
+    </script>
+</head>
+
+<body>
+	<div data-role="page">
+		<div data-role="panel" id="menu">
+			<ul data-role="listview" class="ui-icon-alt">
+    			<li><a href="acelerometro.html" data-transition="slide">Acelerometro</a></li>
+    			<li><a href="camera.html" data-transition="slide">Camara</a></li>
+    			<li><a href="capture.html" data-transition="slide">Captura</a></li>
+    			<li><a href="compass.html" data-transition="slide">Compass</a></li>
+    			<li><a href="connection.html" data-transition="slide">Connection</a></li>
+    			<li><a href="contacts.html" data-transition="slide">Contacts</a></li>
+    			<li><a href="device.html" data-transition="slide">Device</a></li>
+    			<li><a href="events.html" data-transition="slide">Events</a></li>
+    			<li><a href="file.html" data-transition="slide">File</a></li>
+    			<li><a href="geo.html" data-transition="slide">Geo</a></li>
+    			<li><a href="global.html" data-transition="slide">Global</a></li>
+    			<li><a href="inapp.html" data-transition="slide">In App Browser</a></li>
+    			<li><a href="media.html" data-transition="slide">Media</a></li>
+    			<li><a href="notificacion.html" data-transition="slide">Notificaciones</a></li>
+    			<li><a href="splash.html" data-transition="slide">Splash screen</a></li>
+    			<li><a href="storage.html" data-transition="slide">Storage</a></li>
+    			
+    
+			</ul>
+
+		</div>
+		<header data-role="header">
+				<a href="#menu" data-icon="bars"></a>
+				<h1>Captura</h1>
+				<a href="#" data-icon="back" data-rel="back"></a>
+		</header>
+		<section data-role="container">
+			<button onclick="captureVideo();">Capture Video</button> <br>
+		</section>
+
+	</div>
+	<script type="text/javascript" src="phonegap.js"></script>
+</body>
+</html>
